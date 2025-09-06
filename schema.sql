@@ -7,7 +7,7 @@ CREATE TABLE ocorrencias (
     natureza VARCHAR(255),
     logradouro VARCHAR(255),
     bairro VARCHAR(255),
-    latittude VARCHAR(50),
+    latitude VARCHAR(50),
     longitude VARCHAR(50)
 );
 
