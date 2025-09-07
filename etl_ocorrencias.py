@@ -21,14 +21,13 @@ engine = create_engine(f"postgresql+psycopg2://{USER}:{PASSWORD}@{HOST}:{PORT}/{
 # FIltra e renomeia colunas
 df = df.filter([
     'DATA_OCORRENCIA_BO', 'HORA_OCORRENCIA_BO', 'BAIRRO',
-    'LATITUDE', 'LONGITUDE','LOGRADOURO', 'NATUREZA_APURADA'
+    'LATITUDE', 'LONGITUDE', 'NATUREZA_APURADA'
 ])
 
 df = df.rename(columns={
     'DATA_OCORRENCIA_BO': 'data_ocorrencia',
     'HORA_OCORRENCIA_BO': 'hora',
     'NATUREZA_APURADA': 'natureza',
-    'LOGRADOURO': 'logradouro',
     'BAIRRO': 'bairro',
     'LATITUDE': 'latitude',
     'LONGITUDE': 'longitude'
