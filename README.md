@@ -15,7 +15,7 @@ Este projeto tem como objetivo construir um **observatório de segurança públi
 - **Pandas** - tratamento e análise dos dados.
 - **SQLAlchemy / Psycopg2** - conexão entre Python e PostgreSQL.
 - **PostgreSQL** - banco de dados principal para armazenar ocorrências.
-- **Matplotlib / Plotly** - gráficos e análises.
+- **Plotly** - gráficos e análises.
 - **Django** - visualização do dashboard.
 
 
