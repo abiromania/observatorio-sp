@@ -44,7 +44,7 @@ df['bairro'] = df['bairro'].map(lambda x: str(x).replace('Ú', 'U'))
 
 # Arrenda o horário das ocorrências
 df['hora'] = pd.to_datetime(df['hora'], format='%H:%M:%S', errors='coerce')
-df['hora'] = df['hora'].dt.round('H').dt.hour
+df['hora'] = df['hora'].dt.round('h').dt.hour
 
 # Inserir banco no PostgreSQL
 df.to_sql('ocorrencias', engine, if_exists='replace', index=False)
