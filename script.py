@@ -1,41 +1,55 @@
 import pandas as pd
+import plotly.express as px
 from sqlalchemy import create_engine
 
-
-# Configurações do banco
-USER = 'abiromania'
-PASSWORD = 'abiromania'
-HOST = 'localhost'
-PORT = '5432'
-DB = 'observatorio'
-
-
-# Leitura do arquivo CSV
-csv_file = 'ocorrencias.csv'
-df = pd.read_csv(csv_file, sep=',', encoding='latin1')
-
+# Configuração do banco  ------------------- // ------------------- //
+USER = "abiromania"
+PASSWORD = "abiromania"
+HOST = "localhost"
+PORT = "5432"
+DB = "observatorio"
 
 engine = create_engine(f"postgresql+psycopg2://{USER}:{PASSWORD}@{HOST}:{PORT}/{DB}")
 
+# Querys SQL e DataFrames ------------------- // ------------------- //
+# NATUREZA
+q_total = """
+SELECT natureza, COUNT(*) AS total
+FROM ocorrencias
+GROUP BY natureza
+ORDER BY total DESC
+LIMIT 5;
+"""
+df_total = pd.read_sql(q_total, engine)
 
-# FIltra e renomeia colunas
-df = df.filter([
-    'DATA_OCORRENCIA_BO', 'HORA_OCORRENCIA_BO', 'BAIRRO',
-    'LATITUDE', 'LONGITUDE','LOGRADOURO', 'NATUREZA_APURADA'
-])
+# BAIRRO
+q_bairro = """
+SELECT bairro, COUNT(*) AS total
+FROM ocorrencias
+WHERE bairro IS NOT NULL
+GROUP BY bairro
+ORDER BY total DESC
+LIMIT 5;
+"""
+df_bairro = pd.read_sql(q_bairro, engine)
 
-df = df.rename(columns={
-    'DATA_OCORRENCIA_BO': 'data_ocorrencia',
-    'HORA_OCORRENCIA_BO': 'hora',
-    'NATUREZA_APURADA': 'natureza',
-    'LOGRADOURO': 'logradouro',
-    'BAIRRO': 'bairro',
-    'LATITUDE': 'latitude',
-    'LONGITUDE': 'longitude'
-})
+# Horário
+q_hora = """
+SELECT hora, COUNT(*) AS total
+FROM ocorrencias
+WHERE hora IS NOT NULL
+GROUP BY hora
+ORDER BY total DESC
+LIMIT 5;
+"""
+df_hora = pd.read_sql(q_hora, engine)
 
 
-# Inserir banco no PostgreSQL
-df.to_sql('ocorrencias', engine, if_exists='append', index=False)
+# Gráficos ------------------- // ------------------- //
+fig_total = px.pie(df_total, names='natureza', values='total', title='Maiores Ocorrências em SP')
+fig_bairro = px.bar(df_bairro, x='bairro', y='total', title='Bairros com mais Ocorrências em SP')
+fig_hora = px.bar(df_hora, x='hora', y='total', title='Horários com mais Ocorrências em SP')
 
-print("Dados inseridos com sucesso!")
+#fig_total.show()
+#fig_bairro.show()
+#fig_hora.show()
