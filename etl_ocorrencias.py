@@ -3,8 +3,8 @@ from sqlalchemy import create_engine
 
 
 # Configurações do banco
-USER = 'abiromania'
-PASSWORD = 'abiromania'
+USER = 'postgres'
+PASSWORD = 'postgres'
 HOST = 'localhost'
 PORT = '5432'
 DB = 'observatorio'
