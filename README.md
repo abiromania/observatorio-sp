@@ -10,8 +10,6 @@ Este projeto tem como objetivo construir um **observatório de segurança públi
 - Criar **scripts em Python** para ingestão, tratamento e exploração dos dados.
 - Desenvolver um dashboard com filtros interativos (bairros, horários, natureza das ocorrências, dentre outros).
 
----
-
 ## Tecnologias Utilizadas
 - **Python 3** - scripts de ETL (extração, transformação e carga dos dados).
 - **Pandas** - tratamento e análise dos dados.
