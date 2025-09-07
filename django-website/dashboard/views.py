@@ -42,15 +42,14 @@ def ocorrencias(request):
     FROM ocorrencias
     WHERE hora IS NOT NULL
     GROUP BY hora
-    ORDER BY total DESC
-    LIMIT 5;
+    ORDER BY hora ASC;
     """
     df_hora = pd.read_sql(q_hora, engine)
 
     # Gráficos ------------------- // ------------------- //
     fig_total = px.pie(df_total, names='natureza', values='total', title='Maiores Ocorrências em SP')
     fig_bairro = px.bar(df_bairro, x='bairro', y='total', title='Bairros com mais Ocorrências em SP')
-    fig_hora = px.bar(df_hora, x='hora', y='total', title='Horários com mais Ocorrências em SP')
+    fig_hora = px.line(df_hora, x='hora', y='total', title='Horários com mais Ocorrências em SP')
 
     context = {
         'fig_total': fig_total.to_html(full_html=False),
