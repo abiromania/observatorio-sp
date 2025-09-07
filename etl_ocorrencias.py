@@ -33,14 +33,6 @@ df = df.rename(columns={
     'LONGITUDE': 'longitude'
 })
 
-# Remove pontuação do nome dos bairros
-df['bairro'] = df['bairro'].str.upper()
-df['bairro'] = df['bairro'].map(lambda x: str(x).replace('Ã', 'A')).map(lambda x: str(x).replace('Á', 'A'))
-df['bairro'] = df['bairro'].map(lambda x: str(x).replace('É', 'E')).map(lambda x: str(x).replace('Ê', 'E'))
-df['bairro'] = df['bairro'].map(lambda x: str(x).replace('Í', 'I')).map(lambda x: str(x).replace('Ç', 'C'))
-df['bairro'] = df['bairro'].map(lambda x: str(x).replace('Ó', 'O')).map(lambda x: str(x).replace('Õ', 'O'))
-df['bairro'] = df['bairro'].map(lambda x: str(x).replace('Ú', 'U'))
-
 # Arrenda o horário das ocorrências
 df['hora'] = pd.to_datetime(df['hora'], format='%H:%M:%S', errors='coerce')
 df['hora'] = df['hora'].dt.round('h').dt.hour
