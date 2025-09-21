@@ -10,7 +10,6 @@
 <body>
     <h1>Dashboard - Observatório de Segurança</h1>
 
-    <aside>
         <!-- Filtros -->
         <a href="{% url 'dashboard' %}?natureza=Sem Filtro">
             <button>Sem Filtro</button>
@@ -36,20 +35,20 @@
             <button>Sinistro de Trânsito</button>
         </a>
 
-    </aside>
 
 
-    <section>
-        <!-- Gráficos -->
-            <h2>Maiores Ocorrências por Bairro</h2>
-        {{ fig_bairro|safe }}
+    <!-- Gráficos -->
+    <!-- Gráfico de pizza - Bairro -->
+    {{ fig_bairro|safe }}     {{ fig_mapa|safe }}
 
-            <h2>Maiores Ocorrências por Horário</h2>
-        {{ fig_hora|safe }}
+    <!-- Mapa de Calor !-->
 
-            <h2>Maiores Ocorrências por Horário</h2>
-        {{ fig_mapa|safe }}
-    </section>
+
+    <!-- Gráfico de barras - Hora -->
+    {{ fig_hora|safe }}
+
+
+
 
 </body>
 </html>
