@@ -10,41 +10,46 @@
 <body>
     <h1>Dashboard - Observatório de Segurança</h1>
 
-     <!-- Filtros -->
-    <a href="{% url 'dashboard' %}?natureza=Sem Filtro">
-        <button>Sem Filtro</button>
-    </a>
+    <aside>
+        <!-- Filtros -->
+        <a href="{% url 'dashboard' %}?natureza=Sem Filtro">
+            <button>Sem Filtro</button>
+        </a>
 
-     <a href="{% url 'dashboard' %}?natureza=FURTO">
-        <button>Furto</button>
-    </a>
+        <a href="{% url 'dashboard' %}?natureza=FURTO">
+            <button>Furto</button>
+        </a>
 
-    <a href="{% url 'dashboard' %}?natureza=ROUBO">
-        <button>Roubo</button>
-    </a>
+        <a href="{% url 'dashboard' %}?natureza=ROUBO">
+            <button>Roubo</button>
+        </a>
 
-    <a href="{% url 'dashboard' %}?natureza=LESAO CORPORAL DOLOSA">
-        <button>Lesão Corporal</button>
-    </a>
+        <a href="{% url 'dashboard' %}?natureza=LESAO CORPORAL DOLOSA">
+            <button>Lesão Corporal</button>
+        </a>
 
-    <a href="{% url 'dashboard' %}?natureza=FURTO DE VEICULO">
-        <button>Furto de Veículo</button>
-    </a>
+        <a href="{% url 'dashboard' %}?natureza=FURTO DE VEICULO">
+            <button>Furto de Veículo</button>
+        </a>
 
-    <a href="{% url 'dashboard' %}?natureza=FURTO DE VEICULO">
-        <button>Sinistro de Trânsito</button>
-    </a>
+        <a href="{% url 'dashboard' %}?natureza=FURTO DE VEICULO">
+            <button>Sinistro de Trânsito</button>
+        </a>
 
-    <!-- Gráficos -->
-        <h2>Maiores Ocorrências por Bairro</h2>
-    {{ fig_bairro|safe }}
+    </aside>
 
-        <h2>Maiores Ocorrências por Horário</h2>
-    {{ fig_hora|safe }}
 
-        <h2>Maiores Ocorrências por Horário</h2>
-    {{ fig_mapa|safe }}
+    <section>
+        <!-- Gráficos -->
+            <h2>Maiores Ocorrências por Bairro</h2>
+        {{ fig_bairro|safe }}
 
+            <h2>Maiores Ocorrências por Horário</h2>
+        {{ fig_hora|safe }}
+
+            <h2>Maiores Ocorrências por Horário</h2>
+        {{ fig_mapa|safe }}
+    </section>
 
 </body>
 </html>

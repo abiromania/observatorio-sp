@@ -37,7 +37,7 @@ def ocorrencias(request):
         LIMIT 10;
     """
     df_bairro = pd.read_sql(q_bairro, engine)
-
+    df_bairro = df_bairro.sort_values(by='total', ascending=False)  # Ordena para o gráfico em ordem decrescente
 
 
     # HORARIO ------------------- //
@@ -73,9 +73,9 @@ def ocorrencias(request):
         GROUP BY latitude, longitude;
     """
 
-
-
     df_mapa = pd.read_sql(q_mapa, engine)
+
+
 
     # converter vírgula → ponto e virar número
     for col in ["latitude", "longitude"]:
@@ -85,9 +85,20 @@ def ocorrencias(request):
         )
 
     # Gráficos ------------------- // ------------------- //
-    fig_bairro = px.bar(df_bairro, x='bairro', y='total', 
-                        title=False)
+    fig_bairro = px.pie(
+        df_bairro,
+        names='bairro',
+        values='total', 
+        title=False,
+    )
+    fig_bairro.update_layout(
+        paper_bgcolor='#222222',
+        font_color='white',
+        colorway=px.colors.qualitative.Light24,
+    )
     
+    
+
     fig_hora = px.line(df_hora, x='hora', y='total',
                        title=False)
     fig_hora.update_yaxes(range=[0, 12000])
