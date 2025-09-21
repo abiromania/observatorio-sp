@@ -44,8 +44,7 @@ def ocorrencias(request):
         names='bairro',
         values='total', 
         title='(10) Maiores Ocorrências por Bairro',
-        height=500,
-        width=750,
+        height=550,
     )
     fig_bairro.update_layout(
         colorway=px.colors.qualitative.Light24,
@@ -53,8 +52,15 @@ def ocorrencias(request):
         font_color='white',
         font_size=18,
         font_family='Calibri',
+        hoverlabel=(dict(
+            font_size=18,
+            font_family='Calibri',)
+        ),
     )
-
+    fig_bairro.update_traces(
+        hovertemplate="<b>Bairro:</b> %{label}<br>"+
+        "<b>Total de Ocorrências:</b> %{value}"
+)
 
 
     # HORARIO ------------------- //
@@ -88,16 +94,18 @@ def ocorrencias(request):
 
     # MAPA DE CALOR ------------------- //
     q_mapa = f"""
-        SELECT latitude, longitude, COUNT(*) AS total
+        SELECT bairro, latitude, longitude, COUNT(*) AS total
         FROM ocorrencias
-        WHERE latitude IS NOT NULL AND longitude IS NOT NULL
+        WHERE latitude IS NOT NULL AND
+        longitude IS NOT NULL AND
+        bairro IS NOT NULL
     """
     if natureza_filtrada != "Sem Filtro":
         # Adiciona WHERE se houver um filtro
         q_mapa += f" AND natureza = '{natureza_filtrada}'"
 
     q_mapa += """
-        GROUP BY latitude, longitude;
+        GROUP BY bairro, latitude, longitude;
     """
 
     df_mapa = pd.read_sql(q_mapa, engine)
@@ -115,12 +123,24 @@ def ocorrencias(request):
         lon='longitude',
         radius=10,
         zoom=8, 
+        height=550,
         map_style='open-street-map',
         title=False,
-        height=500,
-        width=200,
+        custom_data=['bairro'],  # Adiciona o bairro como custom_data
     )
-
+    fig_mapa.update_layout(
+        margin={"r":2,"t":7,"l":2,"b":7},
+        paper_bgcolor='#222222',
+        showlegend=False,
+        coloraxis_showscale=False,
+        hoverlabel=dict(
+            font_size=18,
+            font_family='Calibri',
+        )  
+    )
+    fig_mapa.update_traces(
+        hovertemplate="<b>Bairro:</b> %{customdata[0]}<br><b>Total:</b> %{z}"
+    )
 
 
     # Converte os gráficos e envia os gráficos para a pagina HTML

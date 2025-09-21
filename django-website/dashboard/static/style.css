@@ -9,3 +9,12 @@ h1 {
     text-align: center;
     font-family: 'Calibri';
 }
+
+
+.graficos-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
+    justify-content: center;
+    align-items: flex-start;
+}
