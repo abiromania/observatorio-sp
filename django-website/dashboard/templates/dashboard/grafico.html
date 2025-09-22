@@ -11,39 +11,40 @@
     <h1>Observatório de Criminalidades - SP</h1>
 
         <!-- Filtros -->
-        <a href="{% url 'dashboard' %}?natureza=Sem Filtro">
-            <button>Sem Filtro</button>
-        </a>
+        <div class="filtros-container">
+            <a href="{% url 'dashboard' %}?natureza=Sem Filtro">
+                <button class="botao">Sem Filtro</button>
+            </a>
 
-        <a href="{% url 'dashboard' %}?natureza=FURTO">
-            <button>Furto</button>
-        </a>
+            <a href="{% url 'dashboard' %}?natureza=FURTO">
+                <button class="botao">Furto</button>
+            </a>
 
-        <a href="{% url 'dashboard' %}?natureza=ROUBO">
-            <button>Roubo</button>
-        </a>
+            <a href="{% url 'dashboard' %}?natureza=ROUBO">
+                <button class="botao">Roubo</button>
+            </a>
 
-        <a href="{% url 'dashboard' %}?natureza=LESAO CORPORAL DOLOSA">
-            <button>Lesão Corporal</button>
-        </a>
+            <a href="{% url 'dashboard' %}?natureza=LESAO CORPORAL DOLOSA">
+                <button class="botao">Lesão Corporal</button>
+            </a>
 
-        <a href="{% url 'dashboard' %}?natureza=FURTO DE VEICULO">
-            <button>Furto de Veículo</button>
-        </a>
+            <a href="{% url 'dashboard' %}?natureza=FURTO DE VEICULO">
+                <button class="botao">Furto de Veículo</button>
+            </a>
 
-        <a href="{% url 'dashboard' %}?natureza=FURTO DE VEICULO">
-            <button>Sinistro de Trânsito</button>
-        </a>
-
+            <a href="{% url 'dashboard' %}?natureza=FURTO DE VEICULO">
+                <button class="botao">Sinistro de Trânsito</button>
+            </a>
+        </div>
 
 
     <!-- Gráficos lado a lado -->
     <div class="graficos-container">
-        <div style="flex: 1 1 350px; min-width: 48%; max-width: 50%;">
-            {{ fig_bairro|safe }}
-        </div>
-        <div style="flex: 1 1 350px; min-width: 48%; max-width: 50%;">
+        <div style="flex: 1 1 300px; min-width: 300px; max-width: 100%;">
             {{ fig_mapa|safe }}
+        </div>
+        <div style="flex: 1 1 300px; min-width: 300px; max-width: 100%;">
+            {{ fig_bairro|safe }}
         </div>
     </div>
 

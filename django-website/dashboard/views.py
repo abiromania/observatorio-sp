@@ -52,6 +52,11 @@ def ocorrencias(request):
         font_color='white',
         font_size=18,
         font_family='Calibri',
+        title_x=0.5,
+        title_font=dict(
+            size=30,
+            family='Calibri',
+            color='white',),
         hoverlabel=(dict(
             font_size=18,
             font_family='Calibri',)
@@ -122,33 +127,43 @@ def ocorrencias(request):
         lat='latitude',
         lon='longitude',
         radius=10,
-        zoom=8, 
+        zoom=8,
+        center=dict(
+            lat=-23.55052,
+            lon=-46.633308),
         height=550,
         map_style='open-street-map',
-        title=False,
-        custom_data=['bairro'],  # Adiciona o bairro como custom_data
+        title="Mapa de Calor",
+        custom_data=['bairro'],
+        color_continuous_scale='Plasma_r',
     )
     fig_mapa.update_layout(
-        margin={"r":2,"t":7,"l":2,"b":7},
+        margin={"r":20,"t":100,"l":20,"b":70},
         paper_bgcolor='#222222',
         showlegend=False,
         coloraxis_showscale=False,
         hoverlabel=dict(
             font_size=18,
             font_family='Calibri',
-        )  
+            font_color='white',
+            bgcolor='#222222',),
+        title_font=dict(
+            size=35,
+            family='Calibri',
+            color='white',),
+        title_x=0.5,
     )
     fig_mapa.update_traces(
-        hovertemplate="<b>Bairro:</b> %{customdata[0]}<br><b>Total:</b> %{z}"
+        hovertemplate="<b>Bairro:</b> %{customdata[0]}",
+        opacity=0.6,
     )
 
 
     # Converte os gráficos e envia os gráficos para a pagina HTML
     context = {
-        'fig_bairro': fig_bairro.to_html(full_html=False),
-        'fig_hora': fig_hora.to_html(full_html=False),
-        'fig_mapa': fig_mapa.to_html(full_html=False),
-
+        'fig_bairro': fig_bairro.to_html(full_html=False, config={"responsive": True}),
+        'fig_hora': fig_hora.to_html(full_html=False, config={"responsive": True}),
+        'fig_mapa': fig_mapa.to_html(full_html=False, config={"responsive": True}),
     }
 
     return render(request, 'dashboard/grafico.html', context)
