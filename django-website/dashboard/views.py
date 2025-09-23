@@ -1,5 +1,6 @@
 import pandas as pd
 import plotly.express as px
+import json
 from sqlalchemy import create_engine
 from django.shortcuts import render
 
@@ -37,7 +38,6 @@ def ocorrencias(request):
     """
     df_bairro = pd.read_sql(q_bairro, engine)
     df_bairro = df_bairro.sort_values(by='total', ascending=False)
-
 
     fig_bairro = px.pie(
         df_bairro,
@@ -110,7 +110,9 @@ def ocorrencias(request):
         q_mapa += f" AND natureza = '{natureza_filtrada}'"
 
     q_mapa += """
-        GROUP BY bairro, latitude, longitude;
+        GROUP BY bairro, latitude, longitude
+        ORDER BY total DESC
+        LIMIT 2000;
     """
 
     df_mapa = pd.read_sql(q_mapa, engine)
@@ -137,6 +139,11 @@ def ocorrencias(request):
         custom_data=['bairro'],
         color_continuous_scale='Plasma_r',
     )
+
+    # Abre o arquivo com o contorno do município
+    with open('./dashboard/boundaries.json', 'r', encoding = 'utf-8') as f:
+        contorno = json.load(f)
+
     fig_mapa.update_layout(
         margin={"r":20,"t":100,"l":20,"b":70},
         paper_bgcolor='#222222',
@@ -152,6 +159,15 @@ def ocorrencias(request):
             family='Calibri',
             color='white',),
         title_x=0.5,
+        map_layers = [
+            {
+                "source": contorno,
+                "type": "line",
+                "color": "red",
+                "line": {"width":2},
+                "below": "traces"
+            }
+        ]
     )
     fig_mapa.update_traces(
         hovertemplate="<b>Bairro:</b> %{customdata[0]}",
