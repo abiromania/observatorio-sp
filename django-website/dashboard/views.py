@@ -139,7 +139,7 @@ def ocorrencias(request):
         SELECT bairro, latitude, longitude, COUNT(*) AS total
         FROM ocorrencias
         WHERE latitude IS NOT NULL AND
-        longitude IS NOT NULL AND
+        NOT latitude = '0' AND
         bairro IS NOT NULL
     """
     if natureza_filtrada != "Sem Filtro":
