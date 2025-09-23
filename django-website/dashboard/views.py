@@ -46,6 +46,7 @@ def ocorrencias(request):
         title='(10) Maiores Ocorrências por Bairro',
         height=550,
     )
+
     fig_bairro.update_layout(
         colorway=px.colors.qualitative.Light24,
         paper_bgcolor='#222222',
@@ -62,21 +63,23 @@ def ocorrencias(request):
             font_family='Calibri',)
         ),
     )
+
     fig_bairro.update_traces(
         hovertemplate="<b>Bairro:</b> %{label}<br>"+
         "<b>Total de Ocorrências:</b> %{value}"
-)
+    )
 
 
     # HORARIO ------------------- //
     q_hora = """
         SELECT hora, COUNT(*) AS total
         FROM ocorrencias
+        WHERE hora IS NOT NULL
     """
 
     if natureza_filtrada != "Sem Filtro":
         # Adiciona WHERE se houver um filtro
-        q_hora += f" WHERE natureza = '{natureza_filtrada}'"
+        q_hora += f" AND natureza = '{natureza_filtrada}'"
 
     q_hora += """
         GROUP BY hora
@@ -89,12 +92,46 @@ def ocorrencias(request):
         df_hora,
         x='hora',
         y='total',
-        title=False,
+        title="Ocorrências por Hora do Dia",
     )
 
     fig_hora.update_yaxes(
-        range=[0, 12000]
+        range=[0, df_hora['total'].max() * 1.1],
     )
+
+    fig_hora.update_layout(
+        paper_bgcolor='#222222',
+        plot_bgcolor='#222222',
+        font_color='white',
+        font_size=18,
+        font_family='Calibri',
+        title_x=0.5,
+        title_font=dict(
+            size=30,
+            family='Calibri',
+            color='white',),
+        xaxis_title='Hora do Dia',
+        yaxis_title='Total de Ocorrências',
+        hoverlabel=(dict(
+            font_size=18,
+            font_family='Calibri',)
+        ),
+    )
+
+    fig_hora.update_traces(
+        mode='markers+lines',
+        marker=dict(size=10, color="#00eeff"),
+        line=dict(width=4, color='#00eeff'),
+        hovertemplate="<b>Hora:</b> %{x}:00<br>"+
+        "<b>Total de Ocorrências:</b> %{y}"
+    )
+
+    fig_hora.update_xaxes(
+        dtick = 4,
+        showgrid=False,
+        range=[0, 23],
+    )
+
 
 
     # MAPA DE CALOR ------------------- //
@@ -108,7 +145,7 @@ def ocorrencias(request):
     if natureza_filtrada != "Sem Filtro":
         # Adiciona WHERE se houver um filtro
         q_mapa += f" AND natureza = '{natureza_filtrada}'"
-
+        
     q_mapa += """
         GROUP BY bairro, latitude, longitude
         ORDER BY total DESC
@@ -169,10 +206,12 @@ def ocorrencias(request):
             }
         ]
     )
+
     fig_mapa.update_traces(
         hovertemplate="<b>Bairro:</b> %{customdata[0]}",
         opacity=0.6,
     )
+
 
 
     # Converte os gráficos e envia os gráficos para a pagina HTML
