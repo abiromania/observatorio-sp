@@ -2,8 +2,8 @@ CREATE DATABASE observatorio;
 
 CREATE TABLE ocorrencias (
     id SERIAL PRIMARY KEY,
-    data_ocorrencia DATE,
-    hora TIME,
+    data_ocorrencia DOUBLE PRECISION,
+    hora INTEGER,
     natureza VARCHAR(255),
     bairro VARCHAR(255),
     latitude VARCHAR(50),

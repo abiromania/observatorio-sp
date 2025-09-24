@@ -33,14 +33,14 @@ df = df.rename(columns={
     'LONGITUDE': 'longitude'
 })
 
-# Converter o campo hora para o formato TIME do SQL
-df['hora'] = pd.to_datetime(df['hora'], format='%H:%M:%S', errors='coerce').dt.strftime('%H:%M:%S')
+# Arredondar o horário das ocorrências
+df['hora'] = pd.to_datetime(df['hora'], format='%H:%M:%S', errors='coerce')
+df['hora'] = df['hora'].dt.round('h').dt.hour
 
-
-# Converter o campo data para o formato DATE do SQL
+# Converter data para o formato DATE do SQL
 df['data_ocorrencia'] = pd.to_datetime(df['data_ocorrencia'], format='%d/%m/%Y', errors='coerce').dt.date
 
-# Filtrar ocorrências de 2025
+# Filtrar ocorrências de 2024
 df = df[df['data_ocorrencia'] >= pd.to_datetime('2025-01-01').date()]
 
 # Inserir banco no PostgreSQL
