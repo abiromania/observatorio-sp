@@ -11,18 +11,21 @@ h1 {
 }
 
 
+.indicadores-container {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    margin-bottom: 30px;
+    font-size: 24px;
+    font-weight: bold;
+}
+
 .graficos-container {
     display: flex;
     flex-wrap: wrap;
     gap: 24px;
     justify-content: center;
     align-items: flex-start;
-}
-
-.graficos-container > div .plotly-graph-div {
-    width: 100% !important;
-    min-width: 0 !important;
-    height: auto !important;
 }
 
 .filtros-container {

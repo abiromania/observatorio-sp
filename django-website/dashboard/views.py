@@ -70,7 +70,7 @@ def ocorrencias(request):
     )
 
 
-    # HORARIO ------------------- //
+    # HORA ------------------- //
     q_hora = """
         SELECT hora, COUNT(*) AS total
         FROM ocorrencias
@@ -92,7 +92,7 @@ def ocorrencias(request):
         df_hora,
         x='hora',
         y='total',
-        title="Ocorrências por Hora do Dia",
+        title="Ocorrências por Horario",
     )
 
     fig_hora.update_yaxes(
@@ -114,7 +114,8 @@ def ocorrencias(request):
         yaxis_title='Total de Ocorrências',
         hoverlabel=(dict(
             font_size=18,
-            font_family='Calibri',)
+            font_family='Calibri',
+            )
         ),
     )
 
@@ -131,6 +132,67 @@ def ocorrencias(request):
         showgrid=False,
         range=[0, 23],
     )
+
+
+
+    # DATA ------------------- //
+    q_data = """
+        SELECT data_ocorrencia, COUNT(*) AS total
+        FROM ocorrencias
+        WHERE data_ocorrencia IS NOT NULL AND
+        NOT data_ocorrencia = '2025-07-01'
+    """
+
+    if natureza_filtrada != "Sem Filtro":
+        # Adiciona WHERE se houver um filtro
+        q_data += f" AND natureza = '{natureza_filtrada}'"
+
+    q_data += """
+        GROUP BY data_ocorrencia
+        ORDER BY data_ocorrencia ASC;
+    """
+
+    df_data = pd.read_sql(q_data, engine)
+
+    fig_data = px.line(
+        df_data,
+        x='data_ocorrencia',
+        y='total',
+        title="Ocorrências por Dia",
+    )
+
+    fig_data.update_yaxes(
+        range=[0, df_data['total'].max() * 1.1],
+    )
+
+    fig_data.update_layout(
+        paper_bgcolor='#222222',
+        plot_bgcolor='#222222',
+        font_color='white',
+        font_size=18,
+        font_family='Calibri',
+        title_x=0.5,
+        title_font=dict(
+            size=30,
+            family='Calibri',
+            color='white',),
+        xaxis_title='Dia',
+        yaxis_title='Total de Ocorrências',
+        hoverlabel=(dict(
+            font_size=18,
+            font_family='Calibri',)
+        ),
+    )
+
+    fig_data.update_traces(
+        mode='lines',
+        line=dict(width=4, color='#00eeff'),
+        hovertemplate="<b>Data:</b> %{x}<br>"+
+        "<b>Total de Ocorrências:</b> %{y}"
+    )
+
+    fig_data.update_xaxes(showgrid=False)
+    fig_data.update_yaxes(showgrid=False)
 
 
 
@@ -154,7 +216,7 @@ def ocorrencias(request):
 
     df_mapa = pd.read_sql(q_mapa, engine)
 
-    # converter vírgula → ponto e virar número
+    # Arrumar formato das colunas de latitude e longitude
     for col in ["latitude", "longitude"]:
         df_mapa[col] = pd.to_numeric(
             df_mapa[col].astype(str).str.strip().str.replace(",", ".", regex=False),
@@ -192,7 +254,7 @@ def ocorrencias(request):
             font_color='white',
             bgcolor='#222222',),
         title_font=dict(
-            size=35,
+            size=30,
             family='Calibri',
             color='white',),
         title_x=0.5,
@@ -212,13 +274,19 @@ def ocorrencias(request):
         opacity=0.6,
     )
 
+    total = int(df_data['total'].sum())
 
 
     # Converte os gráficos e envia os gráficos para a pagina HTML
     context = {
+        # Gráficos
         'fig_bairro': fig_bairro.to_html(full_html=False, config={"responsive": True}),
         'fig_hora': fig_hora.to_html(full_html=False, config={"responsive": True}),
+        'fig_data': fig_data.to_html(full_html=False, config={"responsive": True}),
         'fig_mapa': fig_mapa.to_html(full_html=False, config={"responsive": True}),
+    
+        # Indicadores
+        'total': total,
     }
 
     return render(request, 'dashboard/grafico.html', context)
