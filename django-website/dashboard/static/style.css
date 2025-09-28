@@ -11,6 +11,67 @@ h1 {
 }
 
 
+
+.filtros-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    justify-content: center;
+    margin-bottom: 20px;
+    align-self: center;
+}
+
+.filtro {
+    text-align: center;
+    font-family: 'Calibri';
+    font-size: 18px;
+    margin: 0 15px;
+    background-color: #222222;
+    color: #fdfdfd;
+    padding: 10px;
+    border-radius: 12px;
+    border: 2px solid #00eeff;
+}
+
+.filtro-label {
+    font-family: 'Calibri';
+    font-size: 22px;
+    margin-left: 8px;
+    align-self: center;
+    color: #fdfdfd;
+}
+
+.botao {
+    background-color: #fdfdfd;
+    border: none;
+    color: #222222;
+    padding: 10px 24px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 12px;
+    border: 4px solid #00eeff;
+}
+
+.botao:hover {
+    background-color: #00eeff;
+    color: #222222;
+    border: 4px solid #fdfdfd;
+    box-shadow: 0px 2px 5px #fdfdfd;
+    transition: 0.3s;
+}
+
+.graficos-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
+    justify-content: center;
+    align-items: flex-start;
+}
+
 .indicadores-container {
     display: flex;
     flex-wrap: wrap;
@@ -43,44 +104,4 @@ h1 {
 .indicador:hover {
     box-shadow: 0px 2px 6px #00eeff;
     transition: 0.3s;
-}
-
-.filtros-container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 16px;
-    justify-content: center;
-    margin-bottom: 20px;
-    align-self: center;
-}
-
-.botao {
-    background-color: #fdfdfd;
-    border: none;
-    color: #222222;
-    padding: 10px 24px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 16px;
-    margin: 4px 2px;
-    cursor: pointer;
-    border-radius: 12px;
-    border: 4px solid #00eeff;
-}
-
-.botao:hover {
-    background-color: #00eeff;
-    color: #222222;
-    border: 4px solid #fdfdfd;
-    box-shadow: 0px 2px 5px #fdfdfd;
-    transition: 0.3s;
-}
-
-.graficos-container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 24px;
-    justify-content: center;
-    align-items: flex-start;
 }

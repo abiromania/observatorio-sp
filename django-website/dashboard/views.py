@@ -14,38 +14,41 @@ engine = create_engine(f"postgresql+psycopg2://{USER}:{PASSWORD}@{HOST}:{PORT}/{
 
 
 def ocorrencias(request):
-    # Querys SQL e DataFrames ------------------- // ------------------- //
-    # Filtro natureza
-    natureza_filtrada = ""
-    if 'natureza' in request.GET:
-        natureza_filtrada = request.GET.get('natureza', None)
+    # Filtros recebidos do HTML
+    natureza_filtrada = request.GET.get('natureza', None)
+    data_inicio = request.GET.get('data_inicial', None)
+    data_fim = request.GET.get('data_final', None)
 
-    # Filtro datas
-    data_inicio = request.GET.get('data_inicio', None)
-    data_fim = request.GET.get('data_fim', None)
-
-
-
+    # Função auxiliar para montar filtros
+    def montar_filtros(base_condicoes, params):
+        condicoes = list(base_condicoes)
+        parametros = dict(params)
+        if natureza_filtrada:
+            condicoes.append("natureza = %(natureza)s")
+            parametros['natureza'] = natureza_filtrada
+        if data_inicio and data_fim:
+            condicoes.append("data_ocorrencia BETWEEN %(data_inicio)s AND %(data_fim)s")
+            parametros['data_inicio'] = data_inicio
+            parametros['data_fim'] = data_fim
+        return condicoes, parametros
 
     # MAPA DE CALOR ------------------- //
+    base_condicoes_mapa = [
+        "latitude IS NOT NULL",
+        "NOT latitude = '0'",
+        "bairro IS NOT NULL"
+    ]
+    condicoes_mapa, params_mapa = montar_filtros(base_condicoes_mapa, {})
+    where_mapa = " AND ".join(condicoes_mapa)
     q_mapa = f"""
         SELECT bairro, latitude, longitude, COUNT(*) AS total
         FROM ocorrencias
-        WHERE latitude IS NOT NULL AND
-        NOT latitude = '0' AND
-        bairro IS NOT NULL
-    """
-    if natureza_filtrada != "":
-        # Adiciona WHERE se houver um filtro
-        q_mapa += f" AND natureza = '{natureza_filtrada}'"
-        
-    q_mapa += """
+        WHERE {where_mapa}
         GROUP BY bairro, latitude, longitude
         ORDER BY total DESC
         LIMIT 2000;
     """
-
-    df_mapa = pd.read_sql(q_mapa, engine)
+    df_mapa = pd.read_sql(q_mapa, engine, params=params_mapa)
 
     # Arrumar formato das colunas de latitude e longitude
     for col in ["latitude", "longitude"]:
@@ -109,21 +112,18 @@ def ocorrencias(request):
 
 
     # BAIRRO ------------------- //
-    q_bairro = """
+    base_condicoes_bairro = []
+    condicoes_bairro, params_bairro = montar_filtros(base_condicoes_bairro, {})
+    where_bairro = " AND ".join(condicoes_bairro)
+    q_bairro = f"""
         SELECT bairro, COUNT(*) AS total
         FROM ocorrencias
-    """
-
-    if natureza_filtrada != "":
-        # Adiciona WHERE se houver um filtro
-        q_bairro += f" WHERE natureza = '{natureza_filtrada}'"
-
-    q_bairro += """
+        {"WHERE " + where_bairro if where_bairro else ""}
         GROUP BY bairro
         ORDER BY total DESC
         LIMIT 10;
     """
-    df_bairro = pd.read_sql(q_bairro, engine)
+    df_bairro = pd.read_sql(q_bairro, engine, params=params_bairro)
     df_bairro = df_bairro.sort_values(by='total', ascending=False)
 
     fig_bairro = px.pie(
@@ -160,22 +160,17 @@ def ocorrencias(request):
 
 
     # HORA ------------------- //
-    q_hora = """
+    base_condicoes_hora = ["hora IS NOT NULL"]
+    condicoes_hora, params_hora = montar_filtros(base_condicoes_hora, {})
+    where_hora = " AND ".join(condicoes_hora)
+    q_hora = f"""
         SELECT hora, COUNT(*) AS total
         FROM ocorrencias
-        WHERE hora IS NOT NULL
-    """
-
-    if natureza_filtrada != "":
-        # Adiciona WHERE se houver um filtro
-        q_hora += f" AND natureza = '{natureza_filtrada}'"
-
-    q_hora += """
+        WHERE {where_hora}
         GROUP BY hora
         ORDER BY hora ASC;
     """
-
-    df_hora = pd.read_sql(q_hora, engine)
+    df_hora = pd.read_sql(q_hora, engine, params=params_hora)
 
     fig_hora = px.line(
         df_hora,
@@ -225,23 +220,20 @@ def ocorrencias(request):
 
 
     # DATA ------------------- //
-    q_data = """
+    base_condicoes_data = [
+        "data_ocorrencia IS NOT NULL",
+        "NOT data_ocorrencia = '2025-07-01'"
+    ]
+    condicoes_data, params_data = montar_filtros(base_condicoes_data, {})
+    where_data = " AND ".join(condicoes_data)
+    q_data = f"""
         SELECT data_ocorrencia, COUNT(*) AS total
         FROM ocorrencias
-        WHERE data_ocorrencia IS NOT NULL AND
-        NOT data_ocorrencia = '2025-07-01'
-    """
-
-    if natureza_filtrada != "":
-        # Adiciona WHERE se houver um filtro
-        q_data += f" AND natureza = '{natureza_filtrada}'"
-
-    q_data += """
+        WHERE {where_data}
         GROUP BY data_ocorrencia
         ORDER BY data_ocorrencia ASC;
     """
-
-    df_data = pd.read_sql(q_data, engine)
+    df_data = pd.read_sql(q_data, engine, params=params_data)
 
     fig_data = px.line(
         df_data,

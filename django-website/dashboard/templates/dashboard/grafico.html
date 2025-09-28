@@ -11,32 +11,27 @@
     <h1>Observatório de Criminalidades - SP</h1>
         </br>
 
-        <!-- Filtros -->
-        <div class="filtros-container">
-            <a href="{% url 'dashboard' %}">
-                <button class="botao">Sem Filtro</button>
-            </a>
 
-            <a href="{% url 'dashboard' %}?natureza=FURTO">
-                <button class="botao">Furto</button>
-            </a>
+        <!-- Filtros de data -->
+        <form method="get" action="{% url 'dashboard' %}" class="filtros-container">
+            <label class="filtro-label" for="data_inicial">Data Inicial:</label>
+            <input class="filtro" type="date" id="data_inicial" name="data_inicial" value="{{ data_inicial }}">
 
-            <a href="{% url 'dashboard' %}?natureza=ROUBO">
-                <button class="botao">Roubo</button>
-            </a>
+            <label class="filtro-label" for="data_final">Data Final:</label>
+            <input class="filtro" type="date" id="data_final" name="data_final" value="{{ data_final }}">
 
-            <a href="{% url 'dashboard' %}?natureza=LESAO CORPORAL DOLOSA">
-                <button class="botao">Lesão Corporal</button>
-            </a>
+            <label class="filtro-label" for="natureza">Natureza:</label>
+            <select class="filtro" id="natureza" name="natureza">
+                <option value="">Todas</option>
+                <option value="FURTO" {% if natureza_filtrada == "FURTO" %}selected{% endif %}>Furto</option>
+                <option value="ROUBO" {% if natureza_filtrada == "ROUBO" %}selected{% endif %}>Roubo</option>
+                <option value="LESAO CORPORAL DOLOSA" {% if natureza_filtrada == "LESAO CORPORAL DOLOSA" %}selected{% endif %}>Lesão Corporal</option>
+                <option value="FURTO DE VEICULO" {% if natureza_filtrada == "FURTO DE VEICULO" %}selected{% endif %}>Furto de Veículo</option>
+                <option value="LESAO CORPORAL CULPOSA POR ACIDENTE DE TRANSITO" {% if natureza_filtrada == "LESAO CORPORAL CULPOSA POR ACIDENTE DE TRANSITO" %}selected{% endif %}>Sinistro de Trânsito</option>
+            </select>
 
-            <a href="{% url 'dashboard' %}?natureza=FURTO DE VEICULO">
-                <button class="botao">Furto de Veículo</button>
-            </a>
-
-            <a href="{% url 'dashboard' %}?natureza=FURTO DE VEICULO">
-                <button class="botao">Sinistro de Trânsito</button>
-            </a>
-        </div>
+            <button type="submit" class="botao">Aplicar Filtros</button>
+        </form>
 
 
         <!-- Gráficos -->
@@ -61,7 +56,7 @@
 
 
         <!-- Indicadores -->
-    <h1>Total de Ocorrências</h1>
+    <h1 style="width: 90%">Total de Ocorrências</h1>
 
     </br></br>
 
