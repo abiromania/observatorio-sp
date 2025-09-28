@@ -72,6 +72,12 @@ h1 {
     align-items: flex-start;
 }
 
+.grafico:hover {
+    box-shadow: 0px 0px 10px #fdfdfd;
+    transition: 0.3s;
+
+}
+
 .indicadores-container {
     display: flex;
     flex-wrap: wrap;
