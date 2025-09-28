@@ -13,19 +13,36 @@ h1 {
 
 .indicadores-container {
     display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
     justify-content: center;
-    gap: 40px;
-    margin-bottom: 30px;
-    font-size: 24px;
-    font-weight: bold;
+    margin-bottom: 20px;
+    align-self: center;
 }
 
-.graficos-container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 24px;
-    justify-content: center;
-    align-items: flex-start;
+.indicador {
+    text-align: center;
+    font-family: 'Calibri';
+    font-size: 24px;
+    margin: 0 15px;
+    background-color: #222222;
+    color: #fdfdfd;
+    padding: 10px;
+    border-radius: 12px;
+    border: 2px solid #00eeff;
+    width: 250px;
+    line-height: 2;
+}
+
+.indicador_valor {
+    font-size: 30px;
+    font-weight: bold;
+    color: #fdfdfd;
+}
+
+.indicador:hover {
+    box-shadow: 0px 2px 6px #00eeff;
+    transition: 0.3s;
 }
 
 .filtros-container {
@@ -35,7 +52,6 @@ h1 {
     justify-content: center;
     margin-bottom: 20px;
     align-self: center;
-    
 }
 
 .botao {
@@ -51,4 +67,20 @@ h1 {
     cursor: pointer;
     border-radius: 12px;
     border: 4px solid #00eeff;
+}
+
+.botao:hover {
+    background-color: #00eeff;
+    color: #222222;
+    border: 4px solid #fdfdfd;
+    box-shadow: 0px 2px 5px #fdfdfd;
+    transition: 0.3s;
+}
+
+.graficos-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
+    justify-content: center;
+    align-items: flex-start;
 }

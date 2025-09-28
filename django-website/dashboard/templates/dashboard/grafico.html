@@ -9,12 +9,9 @@
 </head>
 <body>
     <h1>Observatório de Criminalidades - SP</h1>
+        </br>
 
-        <!-- Indicadores -->
-         {{total}}
-
-
-        <!-- Gráficos -->
+        <!-- Filtros -->
         <div class="filtros-container">
             <a href="{% url 'dashboard' %}?natureza=Sem Filtro">
                 <button class="botao">Sem Filtro</button>
@@ -42,27 +39,43 @@
         </div>
 
 
-    <!-- Gráficos lado a lado -->
+        <!-- Gráficos -->
     <div class="graficos-container">
-        <div style="flex: 1 1 300px; min-width: 45%; max-width: 50%;">
+        <div style="flex: 1 1 300px; min-width: 45%; max-width: 45%;" class="grafico">
             {{ fig_mapa|safe }}
         </div>
-        <div style="flex: 1 1 300px; min-width: 45%; max-width: 50%;">
+        <div style="flex: 1 1 300px; min-width: 45%; max-width: 45%;" class="grafico">
             {{ fig_bairro|safe }}
         </div>
     </div>
 
-    <!-- Gráfico de barras - Hora (abaixo) -->
+    <br><br>
+
     <div class='graficos-container'>
-        <div style="flex: 1 1 300px; min-width: 45%; max-width: 50%;">
+        <div style="flex: 1 1 300px; min-width: 45%; max-width: 45%;" class="grafico">
             {{ fig_hora|safe }}
         </div>
-        <div style="flex: 1 1 300px; min-width: 45%; max-width: 50%;">
+        <div style="flex: 1 1 300px; min-width: 45%; max-width: 45%;" class="grafico">
             {{ fig_data|safe }}
     </div>
 
 
+        <!-- Indicadores -->
+    <h1>Total de Ocorrências - Indicadores</h1>
 
+    </br></br>
+
+    <div class="indicadores-container">
+        <p class="indicador">Total<br><span class="indicador_valor">{{ total }}</span></p>
+        <p class="indicador">Furto<br><span class="indicador_valor">{{ total_furto }}</span></p>
+        <p class="indicador">Roubo<br><span class="indicador_valor">{{ total_roubo }}</span></p>
+    </div>
+
+    <div class="indicadores-container">
+        <p class="indicador">Lesão Corporal Dolosa<br><span class="indicador_valor">{{ total_lesao }}</span></p>
+        <p class="indicador">Furto de Veículos<br><span class="indicador_valor">{{ total_veiculos }}</span></p>
+        <p class="indicador">Sinistros de Trânsito<br><span class="indicador_valor">{{ total_sinistros }}</span></p>
+    </div>
 
 </body>
 </html>

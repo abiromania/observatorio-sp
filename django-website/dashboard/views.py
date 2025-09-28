@@ -274,7 +274,22 @@ def ocorrencias(request):
         opacity=0.6,
     )
 
-    total = int(df_data['total'].sum())
+    # Resgatar valor total de ocorrências
+    q_total = """
+        SELECT natureza, COUNT(*) AS total
+        FROM ocorrencias
+        WHERE natureza IS NOT NULL
+        GROUP BY natureza;
+    """
+
+    df_total = pd.read_sql(q_total, engine)
+
+    total = int(df_total['total'].sum())
+    total_furto = int(df_total[df_total['natureza'] == 'FURTO']['total'].sum()) if 'natureza' in df_total.columns else 0
+    total_roubo = int(df_total[df_total['natureza'] == 'ROUBO']['total'].sum()) if 'natureza' in df_total.columns else 0
+    total_lesao = int(df_total[df_total['natureza'] == 'LESAO CORPORAL DOLOSA']['total'].sum()) if 'natureza' in df_total.columns else 0
+    total_veiculos = int(df_total[df_total['natureza'] == 'ROUBO DE VEICULO']['total'].sum()) if 'natureza' in df_total.columns else 0
+    total_sinistros = int(df_total[df_total['natureza'] == 'LESAO CORPORAL CULPOSA POR ACIDENTE DE TRANSITO']['total'].sum()) if 'natureza' in df_total.columns else 0
 
 
     # Converte os gráficos e envia os gráficos para a pagina HTML
@@ -287,6 +302,11 @@ def ocorrencias(request):
     
         # Indicadores
         'total': total,
+        'total_furto': total_furto,
+        'total_roubo': total_roubo,
+        'total_lesao': total_lesao,
+        'total_veiculos': total_veiculos,
+        'total_sinistros': total_sinistros,
     }
 
     return render(request, 'dashboard/grafico.html', context)
