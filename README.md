@@ -18,4 +18,8 @@ Este projeto tem como objetivo construir um **observatório de segurança públi
 - **Plotly** - gráficos e análises.
 - **Django** - visualização do dashboard.
 
+## Resultado "Final"
+
+![plot](Observatorio.png)
+
 
